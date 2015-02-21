@@ -1,0 +1,4 @@
+chap*/notes/*.aux
+chap*/notes/*.txt
+chap*/notes/*.synctex.gz
+chap*/notes/*.log

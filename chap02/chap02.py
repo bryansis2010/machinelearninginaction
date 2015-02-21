@@ -26,7 +26,7 @@ def classify0(in_X, data_set, labels, k):
     sq_distances = sq_diff_matrix.sum(axis=1)
     distances = sq_distances**0.5
     sorted_dist_indices = distances.argsort()
-
+    print(sorted_dist_indices)
     class_histogram = {}
 
     for i in range(k):
@@ -40,7 +40,7 @@ def classify0(in_X, data_set, labels, k):
 
 #end classify0
 
-
+"""Example 2.1"""
 group = array([[1.0,1.1],[1.0,1.0],[0,0],[0,0.1]])
 labels = ['A','A','B','B']
 print(classify0([0.6, 0.6], group, labels, 3))
