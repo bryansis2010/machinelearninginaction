@@ -1,0 +1,32 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath, listings}
+\begin{document}
+\section*{Machine Learning In Action | Chapter 3}
+\subsection*{3.1 | Explaining Shannon's Entropy}
+Given a r.v. $X$, the Shannon Entropy, $H(X)$ of the random variable is given by 
+\begin{equation}
+H(X) = -\sum_{i=1}^n p(x_i)\cdot \log_2p(x_i)
+\end{equation}
+\subsubsection*{Example 3.1: Predicting the Gender of a Child's Name}
+In an example where you intend to predict the gender of a child by his/her name, consider that you have $14$ children names, of which $9$ are male and $5$ are female. Currently, the entropy, $H_1(Y)$ is
+\begin{align*}
+H_1(Y) &= -\sum_{i=1}^n p(x_i)\cdot \log_2p(x_i)\\
+&= -\begin{bmatrix}\frac 9 {14} \cdot \log_2 \begin{pmatrix}\frac 9 {14}\end{pmatrix} + \frac 5 {14} \cdot \log_2 \begin{pmatrix}\frac 5 {14}\end{pmatrix}\end{bmatrix}
+\\&=0.94029
+\end{align*}
+After splitting by some property, say last letter, we end up with 2 groups: the group whose last letter ends with a consonant (Group 0) and the group whose last letter ends with a vowel (Group 1) Group 0 has 6 males and 1 female, while Group 1 has 3 males and 4 females. The new entropy of the individual groups, $H_{2,0}(Y)$ and $H_{2,1}(Y)$ are
+\begin{align*}
+H_{2,0}(Y) &=-\begin{bmatrix}
+\frac 67\cdot log_2(\frac 67) + \frac 17\cdot log_2(\frac 17) \end{bmatrix}\\&=0.59167\\
+H_{2,1}(Y) &=-\begin{bmatrix}\frac 37\cdot log_2(\frac 37) + \frac 47\cdot log_2(\frac 47)\end{bmatrix} \\&=0.98523\\
+\end{align*}
+Taking the weighted of the two, the final entropy after the split , $H_2(Y)$ is
+\begin{align*}
+H_2(Y) &= -\begin{bmatrix}\frac 7 {14} \cdot 0.0.59167 + \frac 7{14} \cdot 0.98523\end{bmatrix}\\&= 0.78845
+\end{align*}
+And so the entropy gain from this split is 
+\begin{align*}
+H_2(Y) - H_1(Y) = 0.94029-0.78845 = 0.15184
+\end{align*}
+By doing this split, we are able to reduce the uncertainty in the outcome by 0.1518.
+\end{document}
