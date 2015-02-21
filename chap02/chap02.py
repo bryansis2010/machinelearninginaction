@@ -6,8 +6,12 @@
 # Created:     21/02/2015
 #-------------------------------------------------------------------------------
 
+#imports from the textbook
 from numpy import *
 import operator
+
+#my own imports to make things easier
+import os
 
 def classify0(in_X, data_set, labels, k):
     """
@@ -40,7 +44,29 @@ def classify0(in_X, data_set, labels, k):
 
 #end classify0
 
+
+def file2matrix(filename):
+    fr = open(filename)
+    num_lines = len(fr.readlines())
+    returned_matrix = zeros((num_lines,3))
+    class_label_vector = []
+
+    fr = open(filename)
+    index = 0
+    for line in fr.readlines():
+        line = line.strip()
+        list_from_line = line.split('\t')
+        returned_matrix [index, :] = list_from_line[0:3]
+        class_label_vector.append(int(list_from_line[-1]))
+        index += 1
+    return returned_matrix, class_label_vector
+#end file2matrix
+
+
 """Example 2.1"""
 group = array([[1.0,1.1],[1.0,1.0],[0,0],[0,0.1]])
 labels = ['A','A','B','B']
 print(classify0([0.6, 0.6], group, labels, 3))
+
+"""Example 2.2.1"""
+datingDataMat, datingLabels = file2matrix
