@@ -119,6 +119,7 @@ def classifyPerson():
     classifierResult = classify0(input_vector,normalized_data_set,
     dating_labels,3)
     print ("You will probably like this person: %s" % result_list[classifierResult - 1])
+#end classifyPerson
 
 
 """Example 2.1
@@ -164,5 +165,53 @@ normalized_data_set, ranges, min_vals = autoNorm(dating_data_matrix)"""
 """Example 2.2.4
 datingClassTest()"""
 
-"""Example 2.2.5"""
-classifyPerson()
+"""Example 2.2.5
+classifyPerson()"""
+
+"""Example 2.3.1"""
+def img2vector(filename):
+    return_vector = zeros((1, 1024))
+    fr= open(filename)
+    for i in range(32):
+        row = fr.readline()
+        for j in range(32):
+            return_vector[0, 32*i+j] = int(row[j])
+    return return_vector
+#end img2vector
+
+def handwritingClassTest():
+    handwriting_labels = []
+
+    resource_path = os.path.dirname(__file__)
+    training_file_list = os.listdir(os.path.join(resource_path,'resource\\trainingDigits'))
+    num_records = len(training_file_list)
+    #print("No. of training records = %d" % (num_records))
+    training_matrix = zeros((num_records, (32*32)))
+
+    for i in range(num_records):
+        file_name_string = training_file_list[i]
+        file_name = file_name_string.split('.')[0]
+        class_num_string = int(file_name.split('_')[0])
+        #add the labels
+        handwriting_labels.append(class_num_string)
+        training_matrix[i, :] = img2vector(os.path.join(resource_path,'resource\\trainingDigits\\',file_name_string))
+
+    test_file_list = os.listdir(os.path.join(resource_path,'resource\\testDigits'))
+    error_count = 0.0
+    num_test_records = len(test_file_list)
+
+    for j in range(num_test_records):
+        file_name_string = test_file_list[j]
+        file_name = file_name_string.split('.')[0]
+        class_num_string = int(file_name.split('_')[0])
+        test_vector = img2vector(os.path.join(resource_path,'resource\\trainingDigits\\',file_name_string))
+        result = classify0(test_vector, training_matrix, handwriting_labels, 4)
+        #print("%d. the classifier came back with : %d, the real answer is %d"
+        #% (j, result, class_num_string))
+        if(result != class_num_string):
+            error_count += 1.0
+    print("the total number of errors is: %d" % error_count)
+    print("the total error rate is %f" % (error_count/(num_test_records)))
+#end handwritingClassTest
+
+handwritingClassTest()
