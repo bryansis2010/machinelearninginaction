@@ -3,10 +3,11 @@
 \begin{document}
 \section*{Machine Learning In Action | Chapter 3}
 \subsection*{3.1 | Explaining Shannon's Entropy}
-Given a r.v. $X$, the Shannon Entropy, $H(X)$ of the random variable is given by 
+Given a random variable $X$, the Shannon Entropy, $H(X)$ of the random variable is given by 
 \begin{equation}
 H(X) = -\sum_{i=1}^n p(x_i)\cdot \log_2p(x_i)
 \end{equation}
+where $n$ is the number of classes. The higher the entropy, the harder it is to predict a value. Since only the size of the Shannon Entropy is relevant for analysis, I will be changing the sign for all values.
 \subsubsection*{Example 3.1: Predicting the Gender of a Child's Name}
 In an example where you intend to predict the gender of a child by his/her name, consider that you have $14$ children names, of which $9$ are male and $5$ are female. Currently, the entropy, $H_1(Y)$ is
 \begin{align*}
@@ -14,7 +15,12 @@ H_1(Y) &= -\sum_{i=1}^n p(x_i)\cdot \log_2p(x_i)\\
 &= -\begin{bmatrix}\frac 9 {14} \cdot \log_2 \begin{pmatrix}\frac 9 {14}\end{pmatrix} + \frac 5 {14} \cdot \log_2 \begin{pmatrix}\frac 5 {14}\end{pmatrix}\end{bmatrix}
 \\&=0.94029
 \end{align*}
-After splitting by some property, say last letter, we end up with 2 groups: the group whose last letter ends with a consonant (Group 0) and the group whose last letter ends with a vowel (Group 1) Group 0 has 6 males and 1 female, while Group 1 has 3 males and 4 females. The new entropy of the individual groups, $H_{2,0}(Y)$ and $H_{2,1}(Y)$ are
+After splitting by some property, say last letter, we end up with 2 groups: 
+\begin{enumerate}
+	\item{the group whose last letter ends with a consonant (Group 0)}
+	\item{the group whose last letter ends with a vowel (Group 1)}
+\end{enumerate}
+ Group 0 has 6 males and 1 female, while Group 1 has 3 males and 4 females. The new entropy of the individual groups, $H_{2,0}(Y)$ and $H_{2,1}(Y)$ are
 \begin{align*}
 H_{2,0}(Y) &=-\begin{bmatrix}
 \frac 67\cdot log_2(\frac 67) + \frac 17\cdot log_2(\frac 17) \end{bmatrix}\\&=0.59167\\
@@ -29,4 +35,59 @@ And so the entropy gain from this split is
 H_2(Y) - H_1(Y) = 0.94029-0.78845 = 0.15184
 \end{align*}
 By doing this split, we are able to reduce the uncertainty in the outcome by 0.1518.
+\subsubsection*{Textbook Example}
+Given the example, letting 'Yes' to be denoted as $1$ and 'No' to be denoted as $0$, we have the matrix:
+\begin{equation*}
+dataset = \begin{pmatrix}
+1&1&1\\1&1&1\\1&0&0\\0&1&0\\0&1&0
+\end{pmatrix}
+\end{equation*}
+and the base entropy, $H_1(dataset)$ to be
+\begin{align*}
+H(dataset) &= -\sum_{i=1}^n p(x_i)\cdot \log_2p(x_i)\\&= -\begin{bmatrix}
+0.4\cdot\log_2(0.4) + 0.6\cdot\log_2(0.6)\end{bmatrix}\\
+&= 0.97095
+\end{align*}
+If we split $dataset$ by the first attribute, we will get 2 matrices, $dataset_{1,1}$ and $dataset_{1,2}$ and if we split $dataset$ by the second attribute, we will get $dataset_{2,1}$ and  $dataset_{2,2}$ such that
+\begin{align*}
+dataset_{1,1} = \begin{pmatrix}
+1&1\\1&1\\0&0
+\end{pmatrix}&&
+dataset_{1,2} =\begin{pmatrix}
+1&0\\1&0
+\end{pmatrix} \\
+dataset_{2,1} =\begin{pmatrix}
+1&1\\1&1\\0&0\\0&0
+\end{pmatrix} &&
+dataset_{2,2} = \begin{pmatrix}
+1&0
+\end{pmatrix}
+\end{align*}
+The new Shannon Entropy after the various splits, is
+\begin{align*}
+H(dataset_1) &=
+-0.6 \begin{bmatrix}
+\frac 2 3 \cdot \log_2 \begin{pmatrix}\frac 23\end{pmatrix} + \frac 13 \cdot \log_2 \begin{pmatrix}\frac 13\end{pmatrix}
+\end{bmatrix} -0.4\overbrace{\begin{bmatrix}
+	1 \cdot \log_2 (1)
+	\end{bmatrix}}^0  \\&=0.55098
+\end{align*}
+and
+\begin{align*}
+H(dataset_2) &=
+-0.8 \begin{bmatrix}
+\frac 24 \cdot \log_2 \begin{pmatrix}\frac 24\end{pmatrix} + \frac 24 \cdot \log_2 \begin{pmatrix}\frac 24\end{pmatrix}
+\end{bmatrix} -0.2\overbrace{\begin{bmatrix}
+1 \cdot \log_2 (1)
+\end{bmatrix}}^0\\&=0.8
+\end{align*}
+The entropy gain by splitting is 
+\begin{align*}
+\Delta H_1 &= H(dataset_1) - H(dataset_0)\\&= -0.55098 - (-0.97095)\\&=0.41997
+\end{align*}
+and 
+\begin{align*}
+\Delta H_2 &= H(dataset_2) - H(dataset_0)\\&= -0.8 - (-0.97095)\\&=0.17095
+\end{align*}
+Since $\Delta H_1 > \Delta H_2$, the first attribute is the better option of the two.
 \end{document}
