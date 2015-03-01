@@ -88,6 +88,7 @@ labels = ['no surfacing','flippers']
 #print(chooseBestFeatureToSplit(dataSet))
 
 """Children Example
+http://stackoverflow.com/questions/1859554/what-is-entropy-and-information-gain
 data_set_1 = [
 ['Jason', 'M'], ['Mark', 'M'], ['Josh', 'M'],
 ['Christian', 'M'], ['Tosh', 'M'], ['Al', 'M'],
