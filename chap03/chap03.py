@@ -8,6 +8,10 @@
 
 #imports from the text
 from math import log
+from numpy import *
+
+#my own imports to make things easier
+import os
 
 def calcShannonEntropy(dataSet):
     num_records = len(dataSet)
@@ -26,7 +30,7 @@ def calcShannonEntropy(dataSet):
     for key in label_counts:
         probability_of_value = (float)(label_counts[key])/num_records
         #log in python is taking natural log
-        entropy_value = probability_of_value*log(probability_of_value, 2)
+        entropy_value = probability_of_value*math.log(probability_of_value, 2)
         shannon_entropy -= entropy_value
         #print(shannon_entropy)
     return shannon_entropy
@@ -55,7 +59,9 @@ def chooseBestFeatureToSplit(dataSet):
     best_info_gain = 0.0; best_feature = -1
 
     for i in range(num_features):
+        #get the vertical array from the 2D array
         feature_list = [example[i] for example in dataSet]
+        #print(feature_list)
         unique_values = set(feature_list)
         new_entropy = 0.0
 
@@ -72,7 +78,63 @@ def chooseBestFeatureToSplit(dataSet):
     return best_feature
 #end chooseBestFeatureToSplit
 
-"""Example 3.1.1"""
+def majorityCount(classList):
+    class_count = {}
+    for vote in classList:
+        if vote not in class_count.keys():
+            class_count[vote] = 0
+        class_count[vote] += 1
+    sorted_class_count = sorted(classCount.items(),
+    key=operater.itemgetter(1), reverse=True)
+    return sorted_class_count[0]
+#end majorityCount
+
+def file2matrix(filename):
+    fr = open(filename)
+    num_lines = len(fr.readlines())
+    returned_matrix = []
+    class_label_vector = []
+
+    fr = open(filename)
+    index = 0
+    for line in fr.readlines():
+        line = line.strip()
+        list_from_line = line.split('\t')
+        #print(list_from_line)
+        #substitutes the row of 0s to values from the text file
+        returned_matrix.append(list_from_line[0:5])
+        #adds the label using the last entry of the row.
+        class_label_vector.append(list_from_line[-1])
+        index += 1
+    return returned_matrix, class_label_vector
+#end file2matrix
+
+def createTree(dataSet, labels):
+    #get all the classes
+    class_list = [example[-1] for example in dataSet]
+    #print(class_list)
+    #stop when all the classes are equal
+    if (class_list.count(class_list[0]) == len(class_list)):
+        return class_list[0]
+    if (len(dataSet[0]) == 1):
+        return majorityCount(class_list)
+
+    best_feature = chooseBestFeatureToSplit(dataSet)
+    best_feature_label = labels[best_feature]
+    my_tree = {best_feature_label : {}}
+    del(labels[best_feature])
+    feature_values = [example[best_feature] for example in dataSet]
+    unique_values = set(feature_values)
+
+    for value in unique_values:
+        sub_labels = labels[:]
+        my_tree[best_feature_label][value] = createTree(
+        splitDataSet(dataSet,best_feature,value),
+        sub_labels)
+    return my_tree
+#end createTree
+
+"""Example 3.1.1
 dataSet = [
 [1, 1, 'yes'],
 [1, 1, 'yes'],
@@ -80,7 +142,7 @@ dataSet = [
 [0, 1, 'no'],
 [0, 1, 'no']
 ]
-labels = ['no surfacing','flippers']
+labels = ['no surfacing','flippers']"""
 #print(calcShannonEntropy(dataSet))
 
 """Example 3.1.2"""
@@ -123,3 +185,13 @@ data_set_1_binary = [
 print(chooseBestFeatureToSplit(data_set_1_binary))"""
 
 """Example 3.1.3"""
+#my_tree = createTree(dataSet,labels)
+
+
+"""Example 3.4"""
+resource_path = os.path.dirname(__file__)
+file_name = 'resource\lenses.txt'
+lenses_txtfile = os.path.join(resource_path, file_name)
+lenses_data_matrix, lenses_labels = file2matrix(lenses_txtfile)
+lenseslabels = ['age', 'prescript', 'astigmatic', 'tearRate']
+my_tree = createTree(lenses_data_matrix,lenseslabels)
