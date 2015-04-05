@@ -1,0 +1,22 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath, listings}
+\begin{document}
+\section*{Machine Learning In Action | Chapter 5}
+\subsection*{5.1 | Sigmoid}
+The sigmoid, $\sigma(z)$, is given by the equation
+\begin{equation*}
+\sigma(z) = \frac{1}{1 + e^{-z}}
+\end{equation*}
+where the input, $z$, is
+\begin{align*}
+z &= \boldmath{W}^T\cdot\boldmath{X}\\
+&= \begin{pmatrix}
+w_0\\w_1\\ \vdots \\w_n
+\end{pmatrix} \cdot 
+\begin{pmatrix}
+x_0&x_1&\cdots & x_n
+\end{pmatrix}\\
+&=w_0x_0 + w_1x_1 + \cdots + w_nx_n\\
+\end{align*}
+The vector $\boldmath X$ is the input data and we want to find the best set of coefficients, $\boldmath W$ so that this classifier is as successful as possible.
+\end{document}
